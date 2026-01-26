@@ -1,14 +1,17 @@
-import UserService from "../../services/user-services/index.js";
+import UserService from "../../services/user.services/index.js";
 import ApiError from "../../utils/APIError.js";
 
 async function deleteUserController(req, res) {
-    const { email, password } = req.body;
+    const { id, email } = req.user;
+    const { password } = req.body;
 
-    if (!email || !password) {
-        throw new ApiError(400, "Enter required fields!");
+    if (!id || !email || !password) {
+        throw new ApiError(400, "Required fields are missing!");
     }
 
-    await UserService.deleteUserService({email, password});
+    const deletedUser = await UserService.deleteUserService({id, email, password});
+
+    return deletedUser;
 }
 
 export default deleteUserController;

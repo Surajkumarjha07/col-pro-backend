@@ -1,11 +1,14 @@
-import UserService from "../../services/user-services/index.js";
+import UserService from "../../services/user.services/index.js";
+import ApiError from "../../utils/APIError.js";
 
 async function signUpUserController(req, res) {
-    const { name, email, password } = req.body;
+    const { email, name, password, role } = req.body;
 
-    if (!email || !name || !password) throw new ApiError(400, "Enter required fields!");
+    if (!email || !name || !password || !role) throw new ApiError(400, "Enter required fields!");
 
-    await UserService.signUpUserService({name, email, password});
+    const user = await UserService.signUpUserService({email, name, password, role});
+
+    return user;
 }
 
 export default signUpUserController;
