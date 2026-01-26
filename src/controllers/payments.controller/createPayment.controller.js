@@ -11,8 +11,6 @@ async function createPaymentController(req, res) {
     
     const { amount, internalPaymentId, paymentId } = req.body;
 
-    console.log("PAYMENT ID:::::::::::: ", internalPaymentId);
-
     const razorpay_order = await PaymentUtils.createRazorpayOrder(amount);
 
     const { id: orderId, currency } = razorpay_order;
