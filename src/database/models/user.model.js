@@ -26,27 +26,6 @@ const UserSchema = new Schema(
       required: false,
       default: "user",
     },
-
-    orders: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Order",
-      },
-    ],
-
-    carts: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Cart",
-      },
-    ],
-
-    productsCreated: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Product",
-      },
-    ],
   },
   {
     timestamps: true,

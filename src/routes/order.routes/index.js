@@ -8,5 +8,6 @@ const orderRouter = Router();
 orderRouter.post("/", authenticate, asyncHandler(OrderController.createOrderController));
 orderRouter.get("/", authenticate, asyncHandler(OrderController.getAllOrdersController));
 orderRouter.put("/", authenticate, asyncHandler(OrderController.cancelOrderController));
+orderRouter.post("/", authenticate, asyncHandler(OrderController.buyNowController));
 
 export default orderRouter;

@@ -10,7 +10,7 @@ const createOrderService = async ({ buyer }) => {
   }
 
   const products = cart.products.map((item) => ({
-    productId: item.productId,
+    product: item.productId,
     quantity: item.quantity,
     price: item.price,
   }));
@@ -24,7 +24,6 @@ const createOrderService = async ({ buyer }) => {
     products,
     totalItems,
     totalAmount,
-    status: "pending",
   });
 
   await Cart.deleteOne({ buyer });

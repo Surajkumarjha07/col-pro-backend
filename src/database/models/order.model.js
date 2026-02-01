@@ -11,7 +11,7 @@ const OrderSchema = new Schema(
 
     products: [
       {
-        productId: {
+        product: {
           type: Schema.Types.ObjectId,
           ref: "Product",
           required: true,
@@ -33,13 +33,7 @@ const OrderSchema = new Schema(
       ref: "User",
       required: true,
     },
-
-    status: {
-      type: String,
-      enum: ["pending", "paid", "cancelled"],
-      default: "pending",
-    },
-
+    
     totalAmount: {
       type: Number,
       min: 0,

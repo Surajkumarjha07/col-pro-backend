@@ -6,7 +6,6 @@ const PaymentSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
-      index: true,
     },
 
     paymentId: {
@@ -17,7 +16,8 @@ const PaymentSchema = new Schema(
 
     orderId: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
 
     currency: {
@@ -32,7 +32,7 @@ const PaymentSchema = new Schema(
 
     status: {
       type: String,
-      enum: ["pending", "paid"],
+      enum: ["pending", "paid", "cancelled"],
       default: "pending",
     },
   },
