@@ -20,6 +20,11 @@ dotenv.config({
     path: path.resolve(process.cwd(), `environments/.env.${ENV}`)
 });
 
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("Loaded ENV file:", `environments/.env.${ENV}`);
+console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
+console.log("MONGO_URI:", process.env.MONGO_URI);
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors({
