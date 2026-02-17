@@ -13,17 +13,14 @@ import { fileURLToPath } from "url";
 
 const app = express();
 
-const ENV = process.env.NODE_ENV || "dev"
+const ENV = process.env.NODE_ENV || "development"
 
 // dotenc config
-dotenv.config({
-    path: path.resolve(process.cwd(), `environments/.env.${ENV}`)
-});
-
-console.log("NODE_ENV:", process.env.NODE_ENV);
-console.log("Loaded ENV file:", `environments/.env.${ENV}`);
-console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
-console.log("MONGO_URI:", process.env.MONGO_URI);
+if (process.env.NODE_ENV !== "production") {   
+    dotenv.config({
+        path: path.resolve(process.cwd(), `environments/.env.${ENV}`)
+    });
+}
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
