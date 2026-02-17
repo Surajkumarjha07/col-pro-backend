@@ -13,7 +13,7 @@ import { fileURLToPath } from "url";
 
 const app = express();
 
-const ENV = process.env.NODE_ENV || "development"
+const ENV = process.env.NODE_ENV || "dev"
 
 // dotenc config
 dotenv.config({
@@ -23,7 +23,7 @@ dotenv.config({
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: process.env.FRONTEND_URL,
   credentials: true,
 }));
 

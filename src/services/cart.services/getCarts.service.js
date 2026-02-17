@@ -5,7 +5,7 @@ import ApiError from "../../utils/APIError.js";
 const getCartsService = async ({buyer}) => {
     const carts = await Cart.findOne({buyer});
 
-    if (!carts || !carts.products || carts.products === 0) {
+    if (!carts || !carts.products || carts.products.length === 0) {
         return new ApiError(400, "No cart found!");
     }
     

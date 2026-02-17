@@ -8,11 +8,11 @@ import attachProductId from "../../middleware/attachProductId.js";
 
 const router = express.Router();
 
-router.post("/create-product", authenticate, RBAC(["seller"]), attachProductId, uploadImage.single("image"), asyncHandler(ProductControllers.CreateProductController));
-router.get("/get-all", authenticate, asyncHandler(ProductControllers.GetAllProductsController));
-router.get("/get-product/:productId", authenticate, asyncHandler(ProductControllers.GetProductController));
+router.post("/", authenticate, RBAC(["seller"]), attachProductId, uploadImage.single("image"), asyncHandler(ProductControllers.CreateProductController));
 router.get("/by-user", authenticate, asyncHandler(ProductControllers.getAllByUserController))
-router.put("/update-product/:productId", authenticate, RBAC(["seller"]), attachProductId, uploadImage.single("newImage"), asyncHandler(ProductControllers.UpdateProductController));
-router.delete("/delete-product/:productId", authenticate, RBAC(["seller"]), asyncHandler(ProductControllers.DeleteProductController));
+router.get("/", authenticate, asyncHandler(ProductControllers.GetAllProductsController));
+router.get("/:productId", authenticate, asyncHandler(ProductControllers.GetProductController));
+router.put("/:productId", authenticate, RBAC(["seller"]), attachProductId, uploadImage.single("newImage"), asyncHandler(ProductControllers.UpdateProductController));
+router.delete("/:productId", authenticate, RBAC(["seller"]), asyncHandler(ProductControllers.DeleteProductController));
 
 export default router;

@@ -1,11 +1,11 @@
 import ProductServices from "../../services/product.services/index.js";
 
 async function GetAllProductsController(req, res) {
-    const { lastId, limit } = req.body;
+    const { page, limit } = req.query;
     
-    const products = await ProductServices.GetAllProductsService({lastId, limit});
+    const {products, totalCount} = await ProductServices.GetAllProductsService({page, limit});
 
-    return products;
+    return {products, totalCount};
 }
 
 export default GetAllProductsController;

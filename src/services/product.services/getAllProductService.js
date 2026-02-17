@@ -1,15 +1,13 @@
-import { Types } from "mongoose";
 import Product from "../../database/models/products.model.js";
 
-async function GetAllProductsService({lastId, limit = 10}) {
-    // const query = lastId ? {$lt: new Types.ObjectId(lastId)} : {};
+async function GetAllProductsService({page = 1, limit = 10}) {
+    const offset = (page - 1) * limit;
 
-    const products = await Product.find({})
-    // .sort({_id: 1})
-    // .limit(limit)
+    const totalCount = await Product.countDocuments();
+    const products = await Product.find().skip(offset).limit(limit);
 
     console.log("Products fetched successfully!");
-    return products;
+    return {products, totalCount};
 }
 
 export default GetAllProductsService;

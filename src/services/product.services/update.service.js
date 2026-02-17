@@ -2,10 +2,11 @@ import { Types } from "mongoose";
 import Product from "../../database/models/products.model.js";
 import ApiError from "../../utils/APIError.js";
 
-async function UpdateProductService({productId, newProductName, newDescription, newPrice, newStock, newImage}) {
+async function UpdateProductService({productId, newProductName, newDescription, newPrice, newStock, newImage, userId}) {
     const product = await Product.findOne(
         {
-            productId
+            productId,
+            seller: userId
         }
     );
 
