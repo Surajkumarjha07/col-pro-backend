@@ -1,12 +1,12 @@
-import { Types } from "mongoose";
 import Product from "../../database/models/products.model.js";
 import ApiError from "../../utils/APIError.js";
+import ProductUtils from "../../utils/productUtils.js";
 
-async function UpdateProductService({productId, newProductName, newDescription, newPrice, newStock, newImage, userId}) {
+async function UpdateProductService({productId, newProductName, newDescription, newPrice, newStock, newImage, sellerId}) {
     const product = await Product.findOne(
         {
             productId,
-            seller: userId
+            seller: sellerId
         }
     );
 
@@ -14,30 +14,26 @@ async function UpdateProductService({productId, newProductName, newDescription, 
         throw new ApiError(404, "Product doesn't exists!");
     }
 
-    // if (newImage) {
-    //     await ProductUtils.deleteProductImage(product.productImage);
-    // }
-
-    const response = await Product.updateOne({
-        productId
-    },
-    {
-        $set: {
-            ...(newProductName && {productName: newProductName}),
-            ...(newDescription && {description: newDescription}),
-            ...(newPrice && {price: newPrice}),
-            ...(newStock && {stock: newStock}),
-            ...(newImage && {productImage: newImage})
+    if (newProductName) {
+        product.productName = newProductName;
+    }
+    if (newDescription) {   
+        product.description = newDescription;
+    }
+    if (newPrice) {
+        product.price = newPrice
+    }
+    if (newStock) {
+        product.stock = newStock;
+    }
+    if (newImage) {
+        if (product.productImage) {
+            await ProductUtils.deleteProductImage(product.productImage);
         }
-    });
-
-    if (!response.acknowledged) {
-        throw new ApiError(404, "Error in updating product credentials");
+        product.productImage = newImage;
     }
 
-    if (response.modifiedCount < 1) {
-        throw new ApiError(400, "Data is already being updated or doesn't exists!");
-    }
+    await product.save();
 
     return {
         message: "Product Successfully updated!"

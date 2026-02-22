@@ -10,6 +10,7 @@ const router = express.Router();
 
 router.post("/", authenticate, RBAC(["seller"]), attachProductId, uploadImage.single("image"), asyncHandler(ProductControllers.CreateProductController));
 router.get("/by-user", authenticate, asyncHandler(ProductControllers.getAllByUserController))
+router.get("/search", authenticate, asyncHandler(ProductControllers.searchProduct));
 router.get("/", authenticate, asyncHandler(ProductControllers.GetAllProductsController));
 router.get("/:productId", authenticate, asyncHandler(ProductControllers.GetProductController));
 router.put("/:productId", authenticate, RBAC(["seller"]), attachProductId, uploadImage.single("newImage"), asyncHandler(ProductControllers.UpdateProductController));

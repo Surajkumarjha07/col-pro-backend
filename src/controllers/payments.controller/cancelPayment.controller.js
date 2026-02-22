@@ -10,6 +10,10 @@ async function cancelPaymentController(req, res) {
     const { orderId } = req.body;
 
     await PaymentService.cancelPaymentService({userId: id, orderId});
+
+    return {
+        message: "Payment successfully cancelled!"
+    }
 }
 
 export default cancelPaymentController;

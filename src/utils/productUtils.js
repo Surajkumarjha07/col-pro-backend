@@ -25,7 +25,7 @@ class ProductUtils {
       throw new ApiError("file path not provided");
     }
 
-    const absolutePath = path.resolve(filepath);
+    const absolutePath = path.join(process.cwd(), filepath);
     console.log("FILEPATH:::::::: ", filepath);
     console.log("ABS PATH:::::::: ", absolutePath);
 
@@ -33,8 +33,8 @@ class ProductUtils {
       await fs.promises.access(absolutePath);
       await fs.promises.unlink(absolutePath);
     } catch (error) {
-      if (err.code !== "ENOENT") {
-        throw err;
+      if (error.code !== "ENOENT") {
+        throw error;
       }
     }
   }

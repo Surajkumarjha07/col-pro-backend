@@ -2,7 +2,7 @@ import { model, Schema } from "mongoose";
 
 const PaymentSchema = new Schema(
   {
-    userId: {
+    buyer: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,

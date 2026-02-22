@@ -3,7 +3,7 @@ import ApiError from "../../utils/APIError.js";
 
 async function GetProductService({productId}) {    
     const product = await Product.findOne({
-        _id: productId
+        productId
     });
 
     if (!product) {

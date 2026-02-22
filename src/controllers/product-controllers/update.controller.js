@@ -4,7 +4,7 @@ import ApiError from "../../utils/APIError.js";
 async function UpdateProductController(req, res) {
     const { productId } = req.params;
     const {newProductName, newDescription, newPrice, newStock} = req.body;
-    let newImage = `uploads/products/${req.file.filename}`;
+    let newImage = req.file ? `uploads/products/${req.file.filename}` : undefined;
 
     const { id, email } = req.user;
 

@@ -9,29 +9,31 @@ async function createPaymentService({
   amount,
 }) {
   const existingPayment = await Payments.findOne({
-    userId,
+    buyer: userId,
     _id: internalPaymentId,
   });
 
   if (existingPayment) {
     return await Payments.updateOne(
       {
-        userId,
+        buyer: userId,
         _id: internalPaymentId,
       },
       {
-        userId,
-        paymentId,
-        orderId,
-        currency,
-        amount,
-        status: "paid",
+        $set : {
+          buyer: userId,
+          paymentId,
+          orderId,
+          currency,
+          amount,
+          status: "paid",
+        }
       },
     );
   }
 
   return await Payments.create({
-    userId,
+    buyer: userId,
     orderId,
     currency,
     amount,
