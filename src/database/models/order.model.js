@@ -9,8 +9,7 @@ const OrderSchema = new Schema(
       required: true,
     },
 
-    products: [
-      {
+    products: [{
         product: {
           type: Schema.Types.ObjectId,
           ref: "Product",
@@ -25,8 +24,7 @@ const OrderSchema = new Schema(
           type: Number,
           required: true,
         },
-      },
-    ],
+      }],
 
     buyer: {
       type: Schema.Types.ObjectId,

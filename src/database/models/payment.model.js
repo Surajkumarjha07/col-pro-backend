@@ -1,7 +1,6 @@
 import { model, Schema } from "mongoose";
 
-const PaymentSchema = new Schema(
-  {
+const PaymentSchema = new Schema({
     buyer: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -35,11 +34,7 @@ const PaymentSchema = new Schema(
       enum: ["pending", "paid", "cancelled"],
       default: "pending",
     },
-  },
-  {
-    timestamps: true,
-  },
-);
+  }, { timestamps: true });
 
 const Payments = model("Payment", PaymentSchema);
 

@@ -1,4 +1,4 @@
-import PaymentService from "../../services/payment.services/index.js";
+import Payments from "../../database/models/payment.model.js";
 
 async function cancelPaymentController(req, res) {
     const { id } = req.user;
@@ -6,10 +6,20 @@ async function cancelPaymentController(req, res) {
     if (!id) {
         return new ApiError(401, "User not authorized!");
     }
-    
+
     const { orderId } = req.body;
 
-    await PaymentService.cancelPaymentService({userId: id, orderId});
+    await Payments.updateOne(
+        {
+            buyer: userId,
+            orderId
+        },
+        {
+            $set: {
+                status: "cancelled"
+            }
+        }
+    )
 
     return {
         message: "Payment successfully cancelled!"

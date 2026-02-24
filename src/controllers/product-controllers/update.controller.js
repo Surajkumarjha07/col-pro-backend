@@ -1,9 +1,10 @@
-import ProductServices from "../../services/product.services/index.js";
+import Product from "../../database/models/products.model.js";
 import ApiError from "../../utils/APIError.js";
+import ProductUtils from "../../utils/productUtils.js";
 
 async function UpdateProductController(req, res) {
     const { productId } = req.params;
-    const {newProductName, newDescription, newPrice, newStock} = req.body;
+    const { newProductName, newDescription, newPrice, newStock } = req.body;
     let newImage = req.file ? `uploads/products/${req.file.filename}` : undefined;
 
     const { id, email } = req.user;
@@ -20,9 +21,41 @@ async function UpdateProductController(req, res) {
         throw new ApiError(400, "Enter atleast one field to update!");
     }
 
-    const response = await ProductServices.UpdateProductService({productId, newProductName, newDescription, newPrice, newStock, newImage, sellerId: id});
+    const product = await Product.findOne(
+        {
+            productId,
+            seller: id
+        }
+    );
 
-    return response;
+    if (!product) {
+        throw new ApiError(404, "Product doesn't exists!");
+    }
+
+    if (newProductName) {
+        product.productName = newProductName;
+    }
+    if (newDescription) {
+        product.description = newDescription;
+    }
+    if (newPrice) {
+        product.price = newPrice
+    }
+    if (newStock) {
+        product.stock = newStock;
+    }
+    if (newImage) {
+        if (product.productImage) {
+            await ProductUtils.deleteProductImage(product.productImage);
+        }
+        product.productImage = newImage;
+    }
+
+    await product.save();
+
+    return {
+        message: "Product Successfully updated!"
+    }
 }
 
 export default UpdateProductController;

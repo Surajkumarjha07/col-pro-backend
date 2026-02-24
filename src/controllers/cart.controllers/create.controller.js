@@ -1,8 +1,9 @@
-import CartServices from "../../services/cart.services/index.js";
+import Cart from "../../database/models/cart.model.js";
 import ApiError from "../../utils/APIError.js";
+import CartUtil from "../../utils/cartUtils.js";
 
 const createCartController = async (req, res) => {
-    const {id} = req.user;
+    const { id } = req.user;
 
     if (!id) {
         return new ApiError(401, "user not authorized to create cart!");
@@ -14,13 +15,49 @@ const createCartController = async (req, res) => {
         return new ApiError(400, "Enter required details!");
     }
 
-    const cart = await CartServices.createCartService({productId, quantity, price, buyer: id});
+    let cart = await Cart.findOne({ buyer: id });
 
     if (!cart) {
-        return new ApiError(500, "Error in creating cart!");
+        return await Cart.create({
+            cartId: CartUtil.generateCartId(),
+            buyer: id,
+            products: [
+                {
+                    productId,
+                    quantity,
+                    price,
+                },
+            ],
+            totalItems: quantity,
+            totalAmount: quantity * price,
+        });
     }
 
-    return cart;
+    const productIndex = cart.products.findIndex(
+        (p) => p.productId.toString() === productId
+    );
+
+    if (productIndex > -1) {
+        cart.products[productIndex].quantity += quantity;
+
+        cart.totalItems += quantity;
+        cart.totalAmount += quantity * price;
+    } else {
+        cart.products.push({
+            productId,
+            quantity,
+            price,
+        });
+
+        cart.totalItems += quantity;
+        cart.totalAmount += quantity * price;
+    }
+
+    await cart.save();
+
+    return {
+        message: "Added to cart successfully!"
+    }
 }
 
 export default createCartController;

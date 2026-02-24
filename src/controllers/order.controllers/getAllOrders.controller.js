@@ -1,4 +1,4 @@
-import OrderService from "../../services/order.services/index.js";
+import Order from "../../database/models/order.model.js";
 import ApiError from "../../utils/APIError.js";
 
 async function getAllOrdersController(req, res) {
@@ -8,7 +8,10 @@ async function getAllOrdersController(req, res) {
         return new ApiError(401, "User not authorized!");
     }
 
-    const orders = await OrderService.getAllOrdersService({buyer: id});
+    const orders = await Order.find({
+        buyer: id
+    })
+        .populate("products.product");
 
     return orders;
 }

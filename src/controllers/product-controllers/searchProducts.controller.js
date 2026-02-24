@@ -1,4 +1,4 @@
-import ProductServices from "../../services/product.services/index.js";
+import Product from "../../database/models/products.model.js";
 import ApiError from "../../utils/APIError.js";
 
 async function searchProduct(req, res) {
@@ -10,10 +10,26 @@ async function searchProduct(req, res) {
         throw new ApiError(401, "User not authorized!");
     }
 
-    const {products, productCount} = await ProductServices.searchProductService(query, page, limit);
+    const offset = (page - 1) * limit;
 
-    return {products, productCount};
+    const products = await Product.find({
+        productName: {
+            $regex: query,
+            $options: "i"
+        }
+    })
+        .skip(offset)
+        .limit(limit)
 
+    const productCount = await Product.find({
+        productName: {
+            $regex: query,
+            $options: "i"
+        }
+    })
+        .countDocuments();
+
+    return { products, productCount };
 }
 
 export default searchProduct;

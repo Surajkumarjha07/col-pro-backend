@@ -1,15 +1,15 @@
-import ProductServices from "../../services/product.services/index.js";
+import Product from "../../database/models/products.model.js";
 import ApiError from "../../utils/APIError.js";
 
 async function CreateProductController(req, res) {
   const { id, email } = req.user;
-  const { productName, description, price, stock } = req.body;
+  const { productName, description, category, price, stock } = req.body;
 
   if (!id || !email) {
     throw new ApiError(401, "User not authorized!");
   }
 
-  if (!(productName && description && price && stock)) {
+  if (!(productName && description && category && price && stock)) {
     throw new ApiError(400, "Enter required details!");
   }
 
@@ -24,15 +24,16 @@ async function CreateProductController(req, res) {
     throw new ApiError(500, "Error in creating product Id");
   }
 
-  const product = await ProductServices.CreateProductService({
-    id,
+  const product = await Product.create({
     productId,
     productName,
     description,
+    category,
     price,
     stock,
-    productImage,
-  });
+    productImage: `uploads/products/${productImage}`,
+    seller: id
+  })
 
   return product;
 }

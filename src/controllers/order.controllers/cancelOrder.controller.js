@@ -1,4 +1,4 @@
-import OrderService from "../../services/order.services/index.js";
+import Order from "../../database/models/order.model.js";
 import ApiError from "../../utils/APIError.js";
 
 async function cancelOrderController(req, res) {
@@ -10,7 +10,21 @@ async function cancelOrderController(req, res) {
 
     const { orderId } = req.body;
 
-    const order = await OrderService.cancelOrderService({buyer: id, orderId});
+    const order = await Order.findOneAndUpdate(
+        {
+            buyer,
+            orderId,
+            status: "pending",
+        },
+        {
+            $set: {
+                status: "cancelled",
+            },
+        },
+        {
+            new: true,
+        },
+    );
 
     return order;
 }

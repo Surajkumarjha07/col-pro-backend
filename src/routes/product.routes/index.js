@@ -9,8 +9,10 @@ import attachProductId from "../../middleware/attachProductId.js";
 const router = express.Router();
 
 router.post("/", authenticate, RBAC(["seller"]), attachProductId, uploadImage.single("image"), asyncHandler(ProductControllers.CreateProductController));
-router.get("/by-user", authenticate, asyncHandler(ProductControllers.getAllByUserController))
+router.get("/by-user", authenticate, asyncHandler(ProductControllers.getAllByUserController));
+router.get("/category", authenticate, asyncHandler(ProductControllers.getByCategoryController));
 router.get("/search", authenticate, asyncHandler(ProductControllers.searchProduct));
+router.put("/review", authenticate, asyncHandler(ProductControllers.reviewController));
 router.get("/", authenticate, asyncHandler(ProductControllers.GetAllProductsController));
 router.get("/:productId", authenticate, asyncHandler(ProductControllers.GetProductController));
 router.put("/:productId", authenticate, RBAC(["seller"]), attachProductId, uploadImage.single("newImage"), asyncHandler(ProductControllers.UpdateProductController));

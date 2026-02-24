@@ -1,4 +1,4 @@
-import PaymentService from "../../services/payment.services/index.js";
+import Payments from "../../database/models/payment.model.js";
 import ApiError from "../../utils/APIError.js";
 import PaymentUtils from "../../utils/PaymentUtils.js";
 
@@ -15,7 +15,41 @@ async function createPaymentController(req, res) {
 
     const { id: orderId, currency } = razorpay_order;
 
-    const payment_order = await PaymentService.createPaymentService({userId: id, paymentId, internalPaymentId, orderId, currency, amount});
+    let payment_order;
+
+    const existingPayment = await Payments.findOne({
+        buyer: id,
+        _id: internalPaymentId,
+      });
+    
+      if (existingPayment) {
+        payment_order = await Payments.updateOne(
+          {
+            buyer: id,
+            _id: internalPaymentId,
+          },
+          {
+            $set : {
+              buyer: id,
+              paymentId,
+              orderId,
+              currency,
+              amount,
+              status: "paid",
+            }
+          },
+        );
+
+        return {payment_order, razorpay_order};
+      }
+    
+      payment_order = await Payments.create({
+        buyer: id,
+        orderId,
+        currency,
+        amount,
+        status: "pending",
+      });
     
     return {payment_order, razorpay_order};
 }

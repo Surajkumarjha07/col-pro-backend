@@ -8,8 +8,7 @@ const CartSchema = new Schema({
     required: true,
   },
 
-  products: [
-    {
+  products: [{
       productId: {
         type: Schema.Types.ObjectId,
         ref: "Product",
@@ -24,8 +23,7 @@ const CartSchema = new Schema({
         type: Number,
         required: true,
       },
-    },
-  ],
+    }],
 
   buyer: {
     type: Schema.Types.ObjectId,
@@ -45,10 +43,7 @@ const CartSchema = new Schema({
     min: 0,
     required: true
   }
-},
-{
-  timestamps: true
-});
+}, { timestamps: true });
 
 const Cart = model("Cart", CartSchema);
 

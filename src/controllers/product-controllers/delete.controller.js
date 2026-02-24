@@ -1,5 +1,6 @@
-import ProductServices from "../../services/product.services/index.js";
+import Product from "../../database/models/products.model.js";
 import ApiError from "../../utils/APIError.js";
+import ProductUtils from "../../utils/productUtils.js";
 
 async function DeleteProductController(req, res) {
     const { productId } = req.params;
@@ -10,9 +11,21 @@ async function DeleteProductController(req, res) {
         throw new ApiError(400, "Product Id is required!");
     }
 
-    const deletedProduct = await ProductServices.DeleteProductService({productId});
+    const product = await Product.findOne({ productId });
 
-    return deletedProduct;
+    if (!product) {
+        throw new ApiError("No product exists with this id!");
+    }
+
+    await ProductUtils.deleteProductImage(product.productImage);
+
+    await Product.deleteOne({
+        productId
+    });
+
+    return {
+        message: "Product successfully deleted!"
+    };
 }
 
 export default DeleteProductController;

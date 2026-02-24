@@ -56,10 +56,6 @@ const updateCartService = async ({ buyer, productId, flag }) => {
     },
   );
 
-  if (!updatedCart.acknowledged) {
-    return new ApiError(500, "Error in deleting cart item");
-  }
-
   return updatedCart;
 };
 
