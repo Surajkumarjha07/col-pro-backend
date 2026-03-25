@@ -1,0 +1,13 @@
+name: First CI Pipeline
+
+on:
+    push:
+        branches: [dev]
+
+jobs:
+    build:
+        runs-on: ubuntu-22.04
+        steps:
+            - uses: actions/checkout@v4
+            - run: npm ci
+            - run: docker build -t first-pipeline .
