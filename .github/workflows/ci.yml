@@ -11,6 +11,6 @@ jobs:
             - uses: actions/checkout@v4
             - run: npm ci
             - run: docker build -t first-pipeline .
-            - run: docker push ${{secrets.DOCKER_USERNAME}}/first-pipeline
             - run: docker tag first-pipeline ${{secrets.DOCKER_USERNAME}}/first-pipeline
+            - run: docker push ${{secrets.DOCKER_USERNAME}}/first-pipeline
             - run: docker run first-pipeline
